@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import Login from "./Components/Login";
+import Signup from "./Components/Signup";
+import ProtectedRoute from "./Components/ProtectedRoute";
+import Home from "./Components/Home";
+import Dashboard from "./Components/Dashboard";
+import ManageUsers from "./Components/ManageUsers";
+import authData from "./auth";
+import { useEffect } from "react";
 
 function App() {
+  useEffect(() => {
+    localStorage.setItem("db", JSON.stringify(authData.users));
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="manage-users" element={<ManageUsers />} />
+      </Route>
+    </Routes>
   );
 }
 
